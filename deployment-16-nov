@@ -1,0 +1,78 @@
+missing dependency packages:
+---------------------------
+mod_ssl
+libossp-uuid.so.16()(64bit)
+libpng12.so.0()(64bit)
+ed
+time
+libcgroup
+libpng12.so.0()(64bit)
+
+Downdoad cmd
+------------
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm4/ mod_ssl -y  
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm5/ libossp-uuid -y   
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm6/ libpng12 -y
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm7/ ed -y
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm8/ time -y
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/rpm9/ libcgroup -y
+
+scp file to sas viya server
+----------------------------
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm4 .
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm5 .
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm6 .
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm7 .
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm8 .
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/rpm9 .
+
+manual install rpm package
+--------------------------
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm4/*.rpm
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm5/*.rpm
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm6/*.rpm
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm7/*.rpm
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm8/*.rpm
+sudo yum -y --disablerepo=* localinstall /home/sas/rpm9/*.rpm
+
+run ansible playbook
+--------------------
+ansible-playbook site.yml -K -vvv
+ansible-playbook site.yml -K 
+
+check live deploymnet log
+-------------------------
+$ tail -f deployment.log
+
+Install screen
+--------------
+ssh -i "xxxx.pem" ec2-user@xxxx.amazonaws.com
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo yum install --downloadonly --downloaddir=/home/ec2-user/screen/ screen -y
+exit
+scp -i "xxxx.pem" -r ec2-user@xxxx.amazonaws.com:/home/ec2-user/screen .
+sudo yum -y --disablerepo=* localinstall /home/sas/screen/*.rpm
+
+To start a screen session type the command:
+$ screen
+or 
+$ screen -S sasviyainstall
+
+List screen session
+$ screen -ls
+
+You can run any application normally.
+
+To detach from the screen press the following keys in sequence:
+Ctrl+a+d
+
+To reattach to the screen type the command:
+$ screen -r
+or 
+$ screen -r sasviyainstall 
+
+More information is available in the manual pages visible by typing the command:
+$ man screen
+
+
+
