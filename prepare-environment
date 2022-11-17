@@ -1,0 +1,18 @@
+subscription-manager register
+hostnamectl -set-hostname sas-viya
+sudo nmcli con mod ens3 ipv4.addresses 192.168.122.20/24
+sudo nmcli con mod ens3 ipv4.gateway 192.168.122.1
+sudo nmcli con mod ens3 ipv4.method manual
+sudo nmcli con mod ens3 ipv4.dns "192.168.2.254"
+sudo nmcli con up ens3
+cat /etc/sysconfig/network-scripts/ifcfg-ens3
+sudo nmcli connection reload
+sudo nmcli con load /etc/sysconfig/network-scripts/ifcfg-ens3
+sudo nmcli con up ens3
+ip r
+ip a show ens3
+usermod --append -G wheel sas
+sudo yum install --downloadonly --downloaddir=/home/sas/install/java java-11-openjdk
+sudo yum -y --disablerepo=* localinstall /home/sas/install/java/*.rpm
+/usr/lib/jvm/java-11-openjdk-11.0.17.0.8-2.el8_6.x86_64/bin/java
+
