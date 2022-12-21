@@ -1,0 +1,44 @@
+Table 2.1. Ports Required for Direct Integration of Linux Systems into AD Using SSSD
+
+Service	Port	Protocol	Notes
+DNS	53	UDP and TCP	 
+LDAP	389	UDP and TCP	 
+Kerberos	88	UDP and TCP	 
+Kerberos	464	UDP and TCP	Used by kadmin for setting and changing a password
+LDAP Global Catalog	3268	TCP	If the id_provider = ad option is being used
+NTP	123	UDP	Optional
+Samba	445	UDP and TCP	For AD Group Policy Objects (GPOs)
+
+
+Open the /etc/sssd/sssd.conf file.
+fallback_homedir = /home/%u
+override_homedir = /home/%u
+
+Restart SSSD.
+systemctl restart sssd.service
+
+Test
+getent passwd user
+
+
+
+Open the /opt/sas/viya/config/etc/cas/default/casconfig_usermods.lua file
+env.CASMAKEHOMEDIR='ALL' 
+env.CASHOMEDIRLOC='/home' 
+env.CASHOMEDIRPERMS='0700'
+
+systemctl restart sas-viya-cascontroller-default
+
+source /opt/sas/viya/config/consul.conf
+export CONSUL_TOKEN=`cat /opt/sas/viya/config/etc/SASSecurityCertificateFramework/tokens/consul/default/client.token`
+
+/opt/sas/viya/home/bin/sas-bootstrap-config kv write --force --key config/launcher-server/global/environment/SASMAKEHOMEDIR --value 1
+
+systemctl restart sas-viya-runlauncher-default
+
+Open the /opt/sas/viya/config/etc/spawner/default/spawner_usermods.sh file
+
+export SASMAKEHOMEDIR=1
+export SASHOMEDIRPERMS=0700
+
+systemctl restart sas-viya-spawner-default
