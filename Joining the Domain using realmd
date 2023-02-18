@@ -1,0 +1,31 @@
+#Joining the Domain using realmd
+dig -t SRV _ldap._tcp.intranet.domain.com
+
+#yum install realmd
+vi /etc/realmd.conf
+[users]
+default-home = /home/%U
+default-shell = /bin/bash
+
+[intranet.domain.com]
+fully-qualified-names = no
+
+#realm discover --verbose intranet.domain.com
+
+#yum install oddjob oddjob-mkhomedir sssd adcli samba-common
+
+#realm join --verbose intranet.domain.com
+
+#realm --verbose permit --realm intranet.domain.com --all
+
+#Testing
+getent passwd sasdemo
+
+
+If you didn’t use fully-qualified-names=no in /etc/realmd.conf you will need to use a qualified userid like so:
+getent passwd INTRANET\\sasdemo
+getent passwd sasdemo@INTRANET.DOMAIN.com
+
+su - sasdemo
+
+
