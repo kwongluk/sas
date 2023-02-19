@@ -15,6 +15,7 @@ fully-qualified-names = no
 #yum install oddjob oddjob-mkhomedir sssd adcli samba-common
 
 #realm join --verbose intranet.domain.com
+realm join --verbose --user=xxxxxx intranet.domain.com
 
 #realm --verbose permit --realm intranet.domain.com --all
 
